@@ -17,3 +17,4 @@ In general, Signals are about managing values, whereas **observables are about m
   Make a value$ observable (in a service) and then in another part of the app subscribe to this value (value$.subscribe(()=> {})).
   But subjects are just one way of creating observables.
   The special kinds of observables that act as event emitters, to be precise.
+  - RxJS gives you multiple functions you can use to create observables. Like `interval()`
