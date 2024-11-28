@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { interval } from 'rxjs';
+import { map, interval } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,10 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     /* RxJS gives you multiple functions
     you can use to create observables. */
-    const subscription$ = interval(2000).subscribe({
+    const subscription$ = interval(2000).pipe(
+      // Operator which convert a value.
+      map((val) => val * 2)
+    ).subscribe({
       next: (val) => console.log(val),
       complete: () => {},
       error: () => {},
