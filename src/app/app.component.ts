@@ -1,4 +1,5 @@
 import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { map, interval } from 'rxjs';
 
 @Component({
@@ -8,30 +9,26 @@ import { map, interval } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   clickCountS = signal(0);
-  intervalNumber!:number;
+  // Convert signal to observable.
+  clickCount$ = toObservable(this.clickCountS);
+  observable!:number;
   private _destroyRef = inject(DestroyRef);
   constructor(){
-    effect(()=>{
-      console.log(`This button has been clicked ${this.clickCountS()} times.`);
-    });
+    /* effect(()=>{
+      console.log(`This button has been clicked ${this.clickCount$} times.`);
+    });*/
   }
   ngOnInit(): void {
-    /* RxJS gives you multiple functions
-    you can use to create observables. */
-    const subscription$ = interval(2000).pipe(
-      // Operator which convert a value.
-      map((val) => val * 2)
-    ).subscribe({
-      next: (val) => this.intervalNumber = val,
-      complete: () => {},
-      error: () => {},
+    // Subscribe to observable.
+    const subscription = this.clickCount$.subscribe({
+      next: (val) => {this.observable = val},
+      complete: () =>{}
     });
     // Don't forget to clean when the componant is not used anymore!
     this._destroyRef.onDestroy(() => {
-      subscription$.unsubscribe();
+      subscription.unsubscribe();
     });
   }
-
   onClick(){
     this.clickCountS.update((prevValue) => prevValue + 1);
   }
