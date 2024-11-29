@@ -28,5 +28,6 @@ Signals have an itinial value  - RxJS Observables have not.
     - ***MORE EFFICIENT*** In case of `interval()` for example.
       Observables are really good for events or anything like that where values do arrive asynchronously over time.
       Whereas Signals can be really awesome for managing application State.
-- [Converting Signal to Observable] (https://www.udemy.com/course/the-complete-guide-to-angular-2/learn/lecture/44116222)
+- [Converting Signal to Observable](https://www.udemy.com/course/the-complete-guide-to-angular-2/learn/lecture/44116222)
+- [Converting Observable to Signal](https://www.udemy.com/course/the-complete-guide-to-angular-2/learn/lecture/44116226)
 
