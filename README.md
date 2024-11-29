@@ -30,4 +30,5 @@ Signals have an itinial value  - RxJS Observables have not.
       Whereas Signals can be really awesome for managing application State.
 - [Converting Signal to Observable](https://www.udemy.com/course/the-complete-guide-to-angular-2/learn/lecture/44116222)
 - [Converting Observable to Signal](https://www.udemy.com/course/the-complete-guide-to-angular-2/learn/lecture/44116226)
-
+- [Creating & Using A Custom Observable From Scratch](https://www.udemy.com/course/the-complete-guide-to-angular-2/learn/lecture/44126630)
+`new Observable((subscriber)=>{})`

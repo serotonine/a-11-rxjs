@@ -1,13 +1,10 @@
 import {
   Component,
   DestroyRef,
-  effect,
   inject,
   OnInit,
-  signal,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { map, interval } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -15,34 +12,30 @@ import { map, interval } from 'rxjs';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-  clickCountS = signal(0);
-  // Convert signal to observable.
-  clickCount$ = toObservable(this.clickCountS);
-  // Convert Observable to Signal.
-  intervals$ = interval(1000);
-  /* As Observable has no intial value 
-  you could pass a second param (object) to init.
-  You could pass a destroyRef alike but it is facultatif*/
-
-  intervalsS = toSignal(this.intervals$, {
-    initialValue: 0,
-    manualCleanup: true,
+  interval: number = 0;
+  // Create an Observable from scratch.
+  customInterval$ = new Observable((subscriber) => {
+    let count = 0;
+    const interval = setInterval(() => {
+      if (count > 3) {
+        console.log(`Count is more than 3 : ${count}`);
+        clearInterval(interval);
+        subscriber.complete();
+        return;
+      }
+      console.log(`Emitting new value : ${count}`);
+      subscriber.next((this.interval = count));
+      count++;
+    }, 2000);
   });
 
-  observable!: number;
   private _destroyRef = inject(DestroyRef);
-  constructor() {
-    /* effect(()=>{
-      console.log(`This button has been clicked ${this.clickCount$} times.`);
-    });*/
-  }
+
   ngOnInit(): void {
     // Subscribe to observable.
-    const subscription = this.clickCount$.subscribe({
-      next: (val) => {
-        this.observable = val;
-      },
-      complete: () => {},
+    const subscription = this.customInterval$.subscribe({
+      next: (val) => console.log(`NgOnInit : ${val}`),
+      complete: () => (this.interval = 0),
     });
     // Don't forget to clean when the componant is not used anymore!
     this._destroyRef.onDestroy(() => {
@@ -50,6 +43,6 @@ export class AppComponent implements OnInit {
     });
   }
   onClick() {
-    this.clickCountS.update((prevValue) => prevValue + 1);
+    this.interval += 2;
   }
 }
